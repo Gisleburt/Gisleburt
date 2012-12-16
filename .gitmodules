@@ -1,0 +1,3 @@
+[submodule "LazyData"]
+	path = LazyData
+	url = https://github.com/Gisleburt/LazyData.git
