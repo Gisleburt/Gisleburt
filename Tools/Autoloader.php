@@ -7,16 +7,16 @@
 		public static $incDirs;
 		
 		public static function psr0($classname) {
-			
-			$classname = ltrim($classname, '\\');
+
+			$class = ltrim($classname, '\\');
 			$filename  = '';
 			$namespace = '';
-			if ($lastNsPos = strripos($classname, '\\')) {
-				$namespace = substr($classname, 0, $lastNsPos);
-				$classname = substr($classname, $lastNsPos + 1);
+			if ($lastNsPos = strripos($class, '\\')) {
+				$namespace = substr($class, 0, $lastNsPos);
+				$class = substr($class, $lastNsPos + 1);
 				$filename  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
 			}
-			$filename .= str_replace('_', DIRECTORY_SEPARATOR, $classname) . '.php';
+			$filename .= str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
 			
 			if(is_readable($filename)) {
 				require $filename;
@@ -25,9 +25,14 @@
 			
 			foreach(self::$incDirs as $dir) {
 				$file = $dir.DIRECTORY_SEPARATOR.$filename;
-				if(is_readable($file))
+				if(is_readable($file)) {
 					require $file;
+					return true;
+				}
 			}
+
+			throw new \Exception("Could not load class: $classname");
+
 		}
 		
 	}
