@@ -78,7 +78,6 @@
 			$actionName = array_shift($rawUriParameters);
 			$this->setActionName(ucwords($actionName));
 
-			//$this->uriParameters = Tools::linearArrayToKeyedArray($rawUriParameters);
 			$this->uriParameters = $rawUriParameters;
 
 		}

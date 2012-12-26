@@ -102,10 +102,12 @@
 			$trace = $exception->getTrace();
 			
 			$lines[] = self::formatTrace($exception->getFile(), $exception->getLine(), $exception->getMessage(), 0);
-			
-			$traceLength = count($trace);
+
 			foreach($trace as $i => $info) {
-				$lines[] = self::formatTrace($info['file'], $info['line'], $info['function'], $i+1);
+				$file = isset($info['file']) ? $info['file'] : '';
+				$line = isset($info['line']) ? $info['line'] : '';
+				$function = isset($info['function']) ? $info['function'] : '';
+				$lines[] = self::formatTrace($file, $line, $function, $i+1);
 			}
 			
 			$info = implode("\n\t",$lines);

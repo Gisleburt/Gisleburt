@@ -6,9 +6,9 @@
 
 		public static $incDirs;
 		
-		public static function psr0($classname) {
+		public static function psr0($className) {
 
-			$class = ltrim($classname, '\\');
+			$class = ltrim($className, '\\');
 			$filename  = '';
 			$namespace = '';
 			if ($lastNsPos = strripos($class, '\\')) {
@@ -31,7 +31,7 @@
 				}
 			}
 
-			throw new \Exception("Could not load class: $classname");
+			return false;
 
 		}
 		

@@ -3,24 +3,28 @@
 	namespace Gisleburt\Templates;
 
 	/**
-	 * Created by JetBrains PhpStorm.
-	 * User: Daniel
-	 * Date: 26/12/12
-	 * Time: 05:17
-	 * To change this template use File | Settings | File Templates.
+	 * Smarty Template Engine wrapper
 	 */
 	class Smarty implements TemplateInterface
 	{
 
 		/**
+		 * Smarty object
 		 * @var \Smarty
 		 */
 		protected $smarty;
 
 		/**
+		 * The template to use unless otherwise stated
 		 * @var string
 		 */
 		protected $template;
+
+		/**
+		 * Configuration
+		 * @var array
+		 */
+		protected $config;
 
 
 		/**
@@ -28,12 +32,39 @@
 		 * @param $config array
 		 */
 		public function initialise(array $config) {
+
+			require_once "{$config['includeDir']}/Smarty.class.php";
+
 			$this->smarty = new \Smarty();
-			$this->smarty->addConfigDir($config['configDir']);
-			$this->smarty->addPluginsDir($config['pluginsDir']);
-			$this->smarty->addPluginsDir($config['sysPluginsDir']);
+
+			if(array_key_exists('configDir', $config))
+				$config['configDirs'][] = $config['configDir'];
+
+			if(array_key_exists('pluginDir', $config))
+				$config['pluginDirs'][] = $config['pluginDir'];
+
+			if(array_key_exists('templateDir', $config))
+				$config['templateDirs'][] = $config['templateDir'];
+
+			foreach($config['configDirs'] as $dir)
+				$this->smarty->addConfigDir($dir);
+
+			foreach($config['pluginsDirs'] as $dir)
+				$this->smarty->addPluginsDir($dir);
+
+			foreach($config['templateDirs'] as $dir)
+				$this->smarty->addTemplateDir($dir);
+
 			$this->smarty->setCacheDir($config['cacheDir']);
+
 			$this->smarty->setCompileDir($config['compileDir']);
+
+			$this->smarty->error_reporting = E_ALL;
+
+			$this->smarty->muteExpectedErrors();
+
+			$this->config = $config;
+
 		}
 
 		/**
@@ -64,7 +95,9 @@
 				else
 					throw new \Exception('No template was set');
 			}
+
 			$this->smarty->display($template);
+
 		}
 
 		/**
@@ -80,6 +113,14 @@
 					throw new \Exception('No template was set');
 			}
 			return $this->smarty->fetch($template);
+		}
+
+		/**
+		 * @depricated
+		 * @param $className
+		 */
+		public static function autoLoad($className) {
+
 		}
 
 	}

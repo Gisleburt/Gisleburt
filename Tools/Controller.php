@@ -17,12 +17,6 @@
 		protected $uriParameters;
 		
 		/**
-		 * Where to find the templates
-		 * @var string
-		 */
-		protected $templateDir;
-		
-		/**
 		 * Variables to be given to the template
 		 * @var stdClass
 		 */
@@ -42,22 +36,17 @@
 		protected function _display($action) {
 
 			// Probably not the right way to do this
-			global $smarty;
+			global $template;
 
 			// Get the template appropriate template
-			$template = $this->_getTemplate($action);
+			$templateFile = $this->_getTemplate($action);
 
 			// Assign the view parameters to the template
-			$smarty->assign(get_object_vars($this->view));
+			$template->assign(get_object_vars($this->view));
 
-			try {
 			// Display the template
-			$smarty->display($template);
-			}
-			catch(\Exception $e) {
-				echo $e->getMessage();
-			}
-			echo '2';
+			$template->display($templateFile);
+
 
 		}
 
@@ -81,13 +70,8 @@
 		 * @param string $file
 		 */
 		protected function _getTemplate($file = null) {
-			$file = "$this->templateDir/$this->controllerName/$file.tpl";
-
-			if(!is_readable($file))
-				throw new \Exception('Could not find template file: $file');
-
+			$file = "$this->controllerName/$file.tpl";
 			return $file;
-
 		}
 
 		/**
