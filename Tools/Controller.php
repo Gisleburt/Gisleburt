@@ -21,6 +21,12 @@
 		 * @var stdClass
 		 */
 		protected $view;
+
+		/**
+		 * Which action was last called
+		 * @var string
+		 */
+		protected $calledAction;
 		
 		public function __construct(array $uriParameters = null) {
 			$this->view = new \stdClass();
@@ -58,6 +64,8 @@
 
 			if(!method_exists($this, $actionToCall.'Action'))
 				throw new \Exception("No Index action and could not start action: $action");
+
+			$this->calledAction = $actionToCall;
 
 			$this->{$actionToCall.'Action'}();
 
