@@ -88,14 +88,14 @@
 		 */
 		public function __set($name, $value) {
 			if($name[0] != '_') {
-				var_dump(setcookie(
+				setcookie(
 						$this->_namespace.$name, 
 						($value),
 						$this->_expire,
 						$this->_path,
 						$this->_secure,
 						$this->_httponly
-					));
+					);
 				$this->$name = $value;
 			}
 

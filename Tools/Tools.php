@@ -54,5 +54,35 @@
 			}
 			return $object;
 		}
+
+		/**
+		 * Turns an array such as [1, 2, 3, 4] into a keyed array of the form [1 => 2, 3 => 4]
+		 * @param array $array
+		 * @param bool $safemode Default false, set to true to prevent accidental overwrite of keyed array
+		 * @return array
+		 */
+		public static function linearArrayToKeyedArray(array $array, $safemode = false) {
+
+			// If safemode, lets check we aren't already dealing with a keyed array.
+			// This is slow so avoid using it.
+			if($safemode)
+				foreach($array as $key => $value)
+					if(!is_numeric($key))
+						return $array;
+
+			$newArray = array();
+			$count = count($array);
+			for($i = 0; $i < $count; $i+=2) {
+				if(isset($array[$i+1]))
+					$newArray[$array[$i]] = $array[$i+1];
+				else
+					$newArray[] = $array[$i];
+			}
+
+			return $newArray;
+
+		}
+
+
 		
 	}

@@ -2,61 +2,74 @@
 
 	namespace Gisleburt\Tools;
 
-	class Controller {
-		
+	abstract class Controller {
+
 		/**
-		
+		 * The name of this controller (used for loading templates)
+		 * @var
+		 */
+		protected $controllerName;
+
 		/**
 		 * Parameters 
 		 * @var array
 		 */
-		protected $parameters;
-		
-		/**
-		 * The template controller
-		 * @var Smarty
-		 */
-		protected $smarty;
-		
-		/**
-		 * This can be overriden to display a different template
-		 * @var string
-		 */
-		protected $template;
+		protected $uriParameters;
 		
 		/**
 		 * Variables to be given to the template
 		 * @var stdClass
 		 */
 		protected $view;
+
+		/**
+		 * Which action was last called
+		 * @var string
+		 */
+		protected $calledAction;
 		
-		public function __construct(array $parameters = null) {
-			
-			$this->parameters = $parameters['parameters'];
-			
-			$this->view = new stdClass();
-			
-			$smartyFolder = APP_DIR.'../libs/Smarty/';
-			
-			require_once $smartyFolder.'Smarty.class.php';
-			
-			// Create an instance of the template controller
-			$this->smarty = new Smarty();
-			$this->smarty->setTemplateDir(APP_DIR.'templates'       )
-			             ->setCompileDir($smartyFolder.'templates_c')
-			             ->setCacheDir(  $smartyFolder.'cache'      )
-			             ->setConfigDir( $smartyFolder.'configs'    );
-			$this->smarty->error_reporting = E_ERROR;
-			 
+		public function __construct(array $uriParameters = null) {
+			$this->view = new \stdClass();
+			$this->uriParameters = $uriParameters;
+			$controllerNameExploded = explode('\\', get_called_class());
+			$this->controllerName = array_pop($controllerNameExploded);
+
 		}
 		
 		/**
 		 * Display the appropriate template file
 		 */
-		protected function _display() {
-			$this->template = $this->_getTemplate($this->template);
-			$this->smarty->assign(get_object_vars($this->view));
-			$this->smarty->display($this->template);
+		protected function _display($action) {
+
+			// Probably not the right way to do this
+			global $template;
+
+			// Get the template appropriate template
+			$templateFile = $this->_getTemplate($action);
+
+			// Assign the view parameters to the template
+			$template->assign(get_object_vars($this->view));
+
+			// Display the template
+			$template->display($templateFile);
+
+
+		}
+
+		public function callAction($action) {
+			if(method_exists($this, $action.'Action'))
+				$actionToCall = $action;
+			else
+				$actionToCall = 'Index';
+
+			if(!method_exists($this, $actionToCall.'Action'))
+				throw new \Exception("No Index action and could not start action: $action");
+
+			$this->calledAction = $actionToCall;
+
+			$this->{$actionToCall.'Action'}();
+
+			$this->_display($action);
 		}
 		
 		/**
@@ -65,11 +78,23 @@
 		 * @param string $file
 		 */
 		protected function _getTemplate($file = null) {
-			if(!$file)
-				$file = $this->parameters['action'].'.tpl';
-			if(strpos($file, '/'));
-				$file = APP_DIR."Controllers/Template/{$this->parameters['controller']}/$file";
+			$file = "$this->controllerName/$file.tpl";
 			return $file;
+		}
+
+		/**
+		 * Look for a parameter based on _REQUEST then URI elements
+		 * @param $name
+		 */
+		protected function _getParam($name) {
+
+			// Check if the request key is already set
+			if(isset($_REQUEST[$name]))
+				return $_REQUEST[$name];
+
+			// See if the
+
+
 		}
 		
 	}
