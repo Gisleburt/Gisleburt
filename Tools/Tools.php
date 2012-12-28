@@ -83,6 +83,23 @@
 
 		}
 
+		/**
+		 * Produce a random string of ascii characters
+		 * @param $length Number of characters in the string
+		 * @return string
+		 */
+		public static function randomAscii($length) {
 
+			$string = '';
+
+			$start = 32; // Space
+			$end = 126; // Tilde
+
+			for($i = 0; $i < $length; $i++)
+				$string .= chr(mt_rand($start, $end));
+
+			return $string;
+
+		}
 		
 	}
