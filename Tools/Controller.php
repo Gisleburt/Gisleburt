@@ -23,17 +23,31 @@
 		protected $view;
 
 		/**
-		 * Which action was last called
+		 * The action trying to be called
 		 * @var string
 		 */
-		protected $calledAction;
+		protected $actionAttempted;
+
+		/**
+		 * Which action was actually called
+		 * @var string
+		 */
+		protected $actionCalled;
+
+		/**
+		 * Global router object
+		 * @var Router
+		 */
+		protected $router;
 		
 		public function __construct(array $uriParameters = null) {
+			global $router, $login;
+			$this->router = $router;
 			$this->view = new \stdClass();
+			$this->view->login = $login;
 			$this->uriParameters = $uriParameters;
 			$controllerNameExploded = explode('\\', get_called_class());
 			$this->controllerName = array_pop($controllerNameExploded);
-
 		}
 		
 		/**
@@ -53,23 +67,27 @@
 			// Display the template
 			$template->display($templateFile);
 
+			die;
 
 		}
 
 		public function callAction($action) {
+
+			$this->actionAttempted = $action;
+
 			if(method_exists($this, $action.'Action'))
 				$actionToCall = $action;
 			else
-				$actionToCall = 'Index';
+				$actionToCall = 'index';
 
 			if(!method_exists($this, $actionToCall.'Action'))
 				throw new \Exception("No Index action and could not start action: $action");
 
-			$this->calledAction = $actionToCall;
+			$this->actionCalled = $actionToCall;
 
 			$this->{$actionToCall.'Action'}();
 
-			$this->_display($action);
+			$this->_display($actionToCall);
 		}
 		
 		/**
@@ -92,8 +110,8 @@
 			if(isset($_REQUEST[$name]))
 				return $_REQUEST[$name];
 
-			// See if the
-
+			// See if the parameter is set in the url
+			var_dump($this->uriParameters);
 
 		}
 		

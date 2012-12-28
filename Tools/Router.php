@@ -85,9 +85,15 @@
 		/**
 		 * Tries to load the requested controller
 		 */
-		public function loadController() {
-			// This needs to be better
-			if($this->controllerName && $this->actionName) {
+		public function loadController($action = null, $controller = null) {
+
+			if($action)
+				$this->setActionName($action);
+
+			if($controller)
+				$this->setControllerName($controller);
+
+			if($this->controllerName) {
 				$this->controller = new $this->controllerName($this->uriParameters);
 
 				$this->controller->callAction($this->actionName);
@@ -101,41 +107,30 @@
 		 */
 		public function setControllerName($controllerName) {
 
-			$controllerName = "$this->namespace\\$controllerName";
-			if(preg_match('/[\w\d]$/', $controllerName) && class_exists($controllerName)) {
+			$controllerName = "\\$this->namespace\\$controllerName";
+			if(class_exists($controllerName)) {
 				$this->controllerName = $controllerName;
 				return true;
 			}
 
-			$this->controllerName = self::DEFAULT_CONTROLLER;
+			$this->controllerName = "\\$this->namespace\\".self::DEFAULT_CONTROLLER;
 			return false;
 
 		}
 
 		/**
-		 * Attempts to set the action name for the given controller, failing that,
-		 * sees if the controller can handle the default action, failing that,
-		 * falls back to the default controller and default action.
+		 * The controller will deal with bad actions so no need to worry here
 		 * @param $actionName
 		 * @return bool
 		 */
 		public function setActionName($actionName) {
 
-			if(method_exists($this->controllerName, $actionName)) {
 				$this->actionName = $actionName;
-				return true;
-			}
 
-			if(method_exists($this->controllerName, self::DEFAULT_ACTION)) {
-				$this->actionName = self::DEFAULT_ACTION;
-				return false;
-			}
+		}
 
-			// Really need to log this has gone epicly wrong
-			$this->controllerName = $this->namespace.'\\'.self::DEFAULT_CONTROLLER;
-			$this->actionName = self::DEFAULT_ACTION;
-			return false;
-
+		public function redirect($url) {
+			header("Location: $url");
 		}
 				
 	}
