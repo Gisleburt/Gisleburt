@@ -59,7 +59,7 @@
 
 			$this->smarty->setCompileDir($config['compileDir']);
 
-			$this->smarty->error_reporting = E_ALL;
+			$this->smarty->error_reporting = E_ERROR;
 
 			$this->smarty->muteExpectedErrors();
 
