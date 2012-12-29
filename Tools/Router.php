@@ -71,11 +71,11 @@
 
 			$rawUriParameters = $this->requestUri;
 			// Controller
-			$controllerName = ucwords(array_shift($rawUriParameters));
+			$controllerName = $this->getRequestedController();
 			$this->setControllerName($controllerName);
 
 			// Action
-			$actionName = array_shift($rawUriParameters);
+			$actionName = $this->getRequestedAction();
 			$this->setActionName(ucwords($actionName));
 
 			$this->uriParameters = $rawUriParameters;
@@ -95,7 +95,6 @@
 
 			if($this->controllerName) {
 				$this->controller = new $this->controllerName($this->uriParameters);
-
 				$this->controller->callAction($this->actionName);
 			}
 		}
@@ -107,6 +106,7 @@
 		 */
 		public function setControllerName($controllerName) {
 
+			$controllerName = ucfirst($controllerName);
 			$controllerName = "\\$this->namespace\\$controllerName";
 			if(class_exists($controllerName)) {
 				$this->controllerName = $controllerName;
@@ -129,8 +129,29 @@
 
 		}
 
-		public function redirect($url) {
+		public function redirect($url = null) {
+			if(!$url)
+				$url = $_SERVER['REQUEST_URI'];
 			header("Location: $url");
+			exit;
+		}
+
+		/**
+		 * What controller was being requested
+		 * @return string
+		 */
+		public function getRequestedController() {
+			if(array_key_exists(0, $this->requestUri))
+				return $this->requestUri[0];
+		}
+
+		/**
+		 * What action was being requested
+		 * @return string
+		 */
+		public function getRequestedAction() {
+			if(array_key_exists(1, $this->requestUri))
+				return $this->requestUri[1];
 		}
 				
 	}

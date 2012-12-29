@@ -67,7 +67,7 @@
 			// Display the template
 			$template->display($templateFile);
 
-			die;
+			exit;
 
 		}
 
