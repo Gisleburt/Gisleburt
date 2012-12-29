@@ -111,8 +111,7 @@
 			if(isset($_REQUEST[$name]))
 				return $_REQUEST[$name];
 
-			// See if the parameter is set in the url
-			var_dump($this->uriParameters);
+			// TODO: Really need to make this more comprehensive
 
 		}
 		
