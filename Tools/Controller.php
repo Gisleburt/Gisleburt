@@ -95,7 +95,8 @@
 		 * Relative or absolute file can be used to override automated functionality
 		 * @param string $file
 		 */
-		protected function _getTemplate($file = null) {
+		protected function _getTemplate($file) {
+			$file = ucfirst($file);
 			$file = "$this->controllerName/$file.tpl";
 			return $file;
 		}
