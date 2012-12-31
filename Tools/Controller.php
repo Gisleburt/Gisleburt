@@ -41,10 +41,9 @@
 		protected $router;
 		
 		public function __construct(array $uriParameters = null) {
-			global $router, $login;
+			global $router;
 			$this->router = $router;
 			$this->view = new \stdClass();
-			$this->view->login = $login;
 			$this->uriParameters = $uriParameters;
 			$controllerNameExploded = explode('\\', get_called_class());
 			$this->controllerName = array_pop($controllerNameExploded);
