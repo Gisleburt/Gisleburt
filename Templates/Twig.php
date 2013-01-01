@@ -9,16 +9,28 @@
 	{
 
 		/**
-		 * Smarty object
-		 * @var \Smarty
+		 * Twig Environment object
+		 * @var \Twig_Environment
 		 */
-		protected $smarty;
+		protected $twig;
+
+		/**
+		 * Twig Loader
+		 * @var Twig_Loader_Filesystem
+		 */
+		protected $loader;
 
 		/**
 		 * The template to use unless otherwise stated
 		 * @var string
 		 */
 		protected $template;
+
+		/**
+		 * Variables that will be passed to the displayed template
+		 * @var array
+		 */
+		protected $templateVariables;
 
 		/**
 		 * Configuration
@@ -33,37 +45,14 @@
 		 */
 		public function initialise(array $config) {
 
-			require_once "{$config['includeDir']}/Smarty.class.php";
+			require_once $config['twigDir'].'/Autoloader.php';
+			Twig_Autoloader::register();
 
-			$this->smarty = new \Smarty();
-
-			if(array_key_exists('configDir', $config))
-				$config['configDirs'][] = $config['configDir'];
-
-			if(array_key_exists('pluginDir', $config))
-				$config['pluginDirs'][] = $config['pluginDir'];
-
-			if(array_key_exists('templateDir', $config))
-				$config['templateDirs'][] = $config['templateDir'];
-
-			foreach($config['configDirs'] as $dir)
-				$this->smarty->addConfigDir($dir);
-
-			foreach($config['pluginsDirs'] as $dir)
-				$this->smarty->addPluginsDir($dir);
-
-			foreach($config['templateDirs'] as $dir)
-				$this->smarty->addTemplateDir($dir);
-
-			$this->smarty->setCacheDir($config['cacheDir']);
-
-			$this->smarty->setCompileDir($config['compileDir']);
-
-			$this->smarty->error_reporting = E_ERROR;
-
-			$this->smarty->muteExpectedErrors();
-
-			$this->config = $config;
+			$loader = new Twig_Loader_Filesystem($config['templateDir']);
+			$twig = new Twig_Environment($loader, array(
+				'cache' => $config['data/templates_c'],
+				'debug' => $config['devmode'],
+			));
 
 		}
 
@@ -73,7 +62,7 @@
 		 * @param $value mixed The value of the variable to assign
 		 */
 		public function assign($name, $value = null) {
-			$this->smarty->assign($name, $value);
+			$this->templateVariables[$name] = $value;
 		}
 
 		/**
@@ -96,8 +85,7 @@
 					throw new \Exception('No template was set');
 			}
 
-			$this->smarty->display($template);
-
+			echo $this->twig->render($template, $this->templateVariables);
 		}
 
 		/**

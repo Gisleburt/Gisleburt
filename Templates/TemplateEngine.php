@@ -5,7 +5,7 @@
 	/**
 	 * An interface to smooth out differences between various template engines
 	 */
-	interface TemplateInterface
+	interface TemplateEngine
 	{
 
 		/**
