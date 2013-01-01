@@ -2,8 +2,6 @@
 
 	namespace Gisleburt\Tools;
 
-	use \Gisleburt\Templates\TemplateInterface;
-
 	/**
 	 * Simple Mailing tool
 	 */
