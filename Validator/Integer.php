@@ -13,7 +13,7 @@
 
 		public function __construct() {}
 
-		public function validate($value) {
+		public function test($value) {
 			$result = $value == (int)$value;
 			if(!$result) {
 				$this->error = self::ERROR_NOT_INTEGER;
