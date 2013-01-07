@@ -5,7 +5,7 @@
 	/**
 	 * Smarty Template Engine wrapper
 	 */
-	class Smarty implements TemplateEngine
+	class Twig implements TemplateEngine
 	{
 
 		/**
@@ -30,7 +30,7 @@
 		 * Variables that will be passed to the displayed template
 		 * @var array
 		 */
-		protected $templateVariables;
+		protected $templateVariables = array();
 
 		/**
 		 * Configuration
@@ -39,18 +39,22 @@
 		protected $config;
 
 
+		public function __construct(array $config = array()) {
+			if($config)
+				$this->initialise($config);
+		}
+
 		/**
 		 * Any initialisation should be done here
 		 * @param $config array
 		 */
 		public function initialise(array $config) {
-
 			require_once $config['twigDir'].'/Autoloader.php';
-			Twig_Autoloader::register();
+			\Twig_Autoloader::register();
 
-			$loader = new Twig_Loader_Filesystem($config['templateDir']);
-			$twig = new Twig_Environment($loader, array(
-				'cache' => $config['data/templates_c'],
+			$loader = new \Twig_Loader_Filesystem($config['templateDirs']);
+			$this->twig = new \Twig_Environment($loader, array(
+				'cache' => $config['compileDir'],
 				'debug' => $config['devmode'],
 			));
 
@@ -100,15 +104,8 @@
 				else
 					throw new \Exception('No template was set');
 			}
-			return $this->smarty->fetch($template);
+			return $this->twig->render($template, $this->templateVariables);
 		}
 
-		/**
-		 * @depricated
-		 * @param $className
-		 */
-		public static function autoLoad($className) {
-
-		}
 
 	}
