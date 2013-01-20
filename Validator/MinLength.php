@@ -18,7 +18,7 @@
 		}
 
 		public function test($value) {
-			$result = strlen($value) >= $this->minLength
+			$result = strlen($value) >= $this->minLength;
 			if(!$result)
 				$this->error = $this->error;
 
