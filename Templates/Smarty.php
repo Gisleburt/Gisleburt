@@ -9,6 +9,12 @@
 	{
 
 		/**
+		 * What to stick on the end of the template name
+		 * @var string
+		 */
+		protected $defaultSuffix = 'tpl';
+
+		/**
 		 * Smarty object
 		 * @var \Smarty
 		 */
@@ -81,25 +87,12 @@
 		}
 
 		/**
-		 * Set the template that will be used
-		 * @param $name string Name of the template file
-		 */
-		public function setTemplate($template) {
-			$this->template = $template;
-		}
-
-		/**
 		 * Display the chosen template.
 		 * @param $template string (optional) Override previously set template for this action only
 		 */
-		public function display($template = null) {
-			if(!isset($template)) {
-				if(isset($this->template))
-					$template = $this->template;
-				else
-					throw new \Exception('No template was set');
-			}
-
+		public function display($template) {
+			if(!strpos($template, '.'))
+				$template = "$template.$this->defaultSuffix";
 			$this->smarty->display($template);
 
 		}
@@ -109,13 +102,9 @@
 		 * @param $template string (optional) Override previously set template for this action only
 		 * @return string
 		 */
-		public function fetch($template = null) {
-			if(!isset($template)) {
-				if(isset($this->template))
-					$template = $this->template;
-				else
-					throw new \Exception('No template was set');
-			}
+		public function fetch($template) {
+			if(!strpos($template, '.'))
+				$template = "$template.$this->defaultSuffix";
 			return $this->smarty->fetch($template);
 		}
 

@@ -9,10 +9,10 @@
 	{
 
 		/**
-		 * Smarty object
-		 * @var \Smarty
+		 * What to stick on the end of the template name
+		 * @var string
 		 */
-		protected $smarty;
+		protected $defaultSuffix = 'php';
 
 		/**
 		 * The template to use unless otherwise stated
@@ -68,14 +68,9 @@
 		 * Display the chosen template.
 		 * @param $template string (optional) Override previously set template for this action only
 		 */
-		public function display($template = null) {
-			if(!isset($template)) {
-				if(isset($this->template))
-					$template = $this->template;
-				else
-					throw new \Exception('No template was set');
-			}
-
+		public function display($template) {
+			if(!strpos($template, '.'))
+				$template = "$template.$this->defaultSuffix";
 			extract($this->templateVars);
 			require $this->getTemplate($template);
 
@@ -86,13 +81,10 @@
 		 * @param $template string (optional) Override previously set template for this action only
 		 * @return string
 		 */
-		public function fetch($template = null) {
-			if(!isset($template)) {
-				if(isset($this->template))
-					$template = $this->template;
-				else
-					throw new \Exception('No template was set');
-			}
+		public function fetch($template) {
+			if(!strpos($template, '.'))
+				$template = "$template.$this->defaultSuffix";
+			extract($this->templateVars);
 			return $this->smarty->fetch($template);
 		}
 

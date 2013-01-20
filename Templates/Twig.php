@@ -9,6 +9,12 @@
 	{
 
 		/**
+		 * What to stick on the end of the template name
+		 * @var string
+		 */
+		protected $defaultSuffix = 'html';
+
+		/**
 		 * Twig Environment object
 		 * @var \Twig_Environment
 		 */
@@ -70,25 +76,12 @@
 		}
 
 		/**
-		 * Set the template that will be used
-		 * @param $name string Name of the template file
-		 */
-		public function setTemplate($template) {
-			$this->template = $template;
-		}
-
-		/**
 		 * Display the chosen template.
 		 * @param $template string (optional) Override previously set template for this action only
 		 */
-		public function display($template = null) {
-			if(!isset($template)) {
-				if(isset($this->template))
-					$template = $this->template;
-				else
-					throw new \Exception('No template was set');
-			}
-
+		public function display($template) {
+			if(!strpos($template, '.'))
+				$template = "$template.$this->defaultSuffix";
 			echo $this->twig->render($template, $this->templateVariables);
 		}
 
@@ -97,13 +90,9 @@
 		 * @param $template string (optional) Override previously set template for this action only
 		 * @return string
 		 */
-		public function fetch($template = null) {
-			if(!isset($template)) {
-				if(isset($this->template))
-					$template = $this->template;
-				else
-					throw new \Exception('No template was set');
-			}
+		public function fetch($template) {
+			if(!strpos($template, '.'))
+				$template = "$template.$this->defaultSuffix";
 			return $this->twig->render($template, $this->templateVariables);
 		}
 

@@ -22,22 +22,16 @@
 		public function assign($name, $value = null);
 
 		/**
-		 * Set the template that will be used
-		 * @param $name string Name of the template file
-		 */
-		public function setTemplate($template);
-
-		/**
 		 * Display the chosen template.
 		 * @param $template string (optional) Override previously set template for this action only
 		 */
-		public function display($template = null);
+		public function display($template);
 
 		/**
 		 * Compiles the template and returns the result as a string
 		 * @param $template string (optional) Override previously set template for this action only
 		 * @return string
 		 */
-		public function fetch($template = null);
+		public function fetch($template);
 
 	}
