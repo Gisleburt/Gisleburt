@@ -96,7 +96,7 @@
 		 */
 		protected function _getTemplate($file) {
 			$file = ucfirst($file);
-			$file = "$this->controllerName/$file.tpl";
+			$file = "$this->controllerName/$file";
 			return $file;
 		}
 
@@ -104,7 +104,7 @@
 		 * Look for a parameter based on _REQUEST then URI elements
 		 * @param $name
 		 */
-		protected function _getParam($name) {
+		protected function getParam($name) {
 
 			// Check if the request key is already set
 			if(isset($_REQUEST[$name]))
