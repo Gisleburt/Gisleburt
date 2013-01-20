@@ -52,13 +52,13 @@
 		/**
 		 * Display the appropriate template file
 		 */
-		protected function _display($action) {
+		protected function display($action) {
 
 			// Probably not the right way to do this
 			global $template;
 
 			// Get the template appropriate template
-			$templateFile = $this->_getTemplate($action);
+			$templateFile = $this->getTemplate($action);
 
 			// Assign the view parameters to the template
 			$template->assign(get_object_vars($this->view));
@@ -86,7 +86,7 @@
 
 			$this->{$actionToCall.'Action'}();
 
-			$this->_display($actionToCall);
+			$this->display($actionToCall);
 		}
 		
 		/**
@@ -94,7 +94,7 @@
 		 * Relative or absolute file can be used to override automated functionality
 		 * @param string $file
 		 */
-		protected function _getTemplate($file) {
+		protected function getTemplate($file) {
 			$file = ucfirst($file);
 			$file = "$this->controllerName/$file";
 			return $file;
@@ -112,6 +112,34 @@
 
 			// TODO: Really need to make this more comprehensive
 
+		}
+
+		/**
+		 * Retrieves a '_GET' variable
+		 * @param string|null $key
+		 * @return mixed
+		 */
+		protected function get($key = null) {
+			if(!isset($key))
+				return $_GET;
+			if(array_key_exists($key, $_GET))
+				return $_GET[$key];
+			return null;
+		}
+
+
+
+		/**
+		 * Retrieves a '_POST' variable
+		 * @param string|null $key
+		 * @return mixed
+		 */
+		protected function post($key = null) {
+			if(!isset($key))
+				return $_POST;
+			if(array_key_exists($key, $_POST))
+				return $_POST[$key];
+			return null;
 		}
 		
 	}
