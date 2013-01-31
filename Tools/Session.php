@@ -60,7 +60,7 @@
 				return $_SESSION[$namespace];
 			
 			// If it's not ok throw a reason.
-			throw new Exception('Object is session does not match requested object.');
+			throw new Exception('Object in session does not match requested object.');
 		}
 		
 	}
