@@ -59,8 +59,8 @@
 			if(get_class($_SESSION[$namespace]) == $classname)
 				return $_SESSION[$namespace];
 			
-			// If it's not ok throw a reason.
-			throw new Exception('Object is session does not match requested object.');
+			// If it's not ok throw an Exception.
+			throw new Exception('Object in session does not match requested object.');
 		}
 		
 	}
