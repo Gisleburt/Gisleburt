@@ -63,7 +63,7 @@
 				'cache' => $config['compileDir'],
 				'debug' => $config['devmode'],
 			));
-
+			return $this;
 		}
 
 		/**
@@ -73,6 +73,7 @@
 		 */
 		public function assign($name, $value = null) {
 			$this->templateVariables[$name] = $value;
+			return $this;
 		}
 
 		/**
@@ -83,6 +84,7 @@
 			if(!strpos($template, '.'))
 				$template = "$template.$this->defaultSuffix";
 			echo $this->twig->render($template, $this->templateVariables);
+			return $this;
 		}
 
 		/**

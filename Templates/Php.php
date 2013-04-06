@@ -42,9 +42,8 @@
 		 * @param $config array
 		 */
 		public function initialise(array $config) {
-
 			$this->config = $config;
-
+			return $this;
 		}
 
 		/**
@@ -62,6 +61,7 @@
 		 */
 		public function setTemplate($template) {
 			$this->template = $template;
+			return $this;
 		}
 
 		/**
@@ -73,7 +73,7 @@
 				$template = "$template.$this->defaultSuffix";
 			extract($this->templateVars);
 			require $this->getTemplate($template);
-
+			return $this;
 		}
 
 		/**
@@ -96,6 +96,7 @@
 				$failedDirs[] = $dir;
 			}
 			throw new \Exception("Template '$template' not found in: ".implode(', ', $failedDirs));
+			return $this;
 		}
 
 

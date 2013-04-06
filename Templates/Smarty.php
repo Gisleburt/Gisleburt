@@ -75,6 +75,8 @@
 
 			$this->config = $config;
 
+			return $this;
+
 		}
 
 		/**
@@ -84,6 +86,7 @@
 		 */
 		public function assign($name, $value = null) {
 			$this->smarty->assign($name, $value);
+			return $this;
 		}
 
 		/**
@@ -94,7 +97,7 @@
 			if(!strpos($template, '.'))
 				$template = "$template.$this->defaultSuffix";
 			$this->smarty->display($template);
-
+			return $this;
 		}
 
 		/**

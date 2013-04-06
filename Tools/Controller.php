@@ -87,6 +87,8 @@
 			$this->{$actionToCall.'Action'}();
 
 			$this->display($actionToCall);
+
+			return $this;
 		}
 		
 		/**
@@ -105,13 +107,7 @@
 		 * @param $name
 		 */
 		protected function getParam($name) {
-
-			// Check if the request key is already set
-			if(isset($_REQUEST[$name]))
-				return $_REQUEST[$name];
-
-			// TODO: Really need to make this more comprehensive
-
+			return Tools::request($name);
 		}
 
 		/**
@@ -120,11 +116,7 @@
 		 * @return mixed
 		 */
 		protected function get($key = null) {
-			if(!isset($key))
-				return $_GET;
-			if(array_key_exists($key, $_GET))
-				return $_GET[$key];
-			return null;
+			return Tools::get();
 		}
 
 
@@ -135,11 +127,7 @@
 		 * @return mixed
 		 */
 		protected function post($key = null) {
-			if(!isset($key))
-				return $_POST;
-			if(array_key_exists($key, $_POST))
-				return $_POST[$key];
-			return null;
+			return Tools::post($key);
 		}
 		
 	}

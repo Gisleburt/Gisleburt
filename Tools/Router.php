@@ -80,6 +80,8 @@
 
 			$this->uriParameters = $rawUriParameters;
 
+			return $this;
+
 		}
 
 		/**
@@ -124,9 +126,8 @@
 		 * @return bool
 		 */
 		public function setActionName($actionName) {
-
-				$this->actionName = $actionName;
-
+			$this->actionName = $actionName;
+			return $this;
 		}
 
 		public function redirect($url = null) {
