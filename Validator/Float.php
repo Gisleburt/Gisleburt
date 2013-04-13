@@ -10,8 +10,6 @@
 
 		const ERROR_NOT_FLOAT = 'Needs to be a number';
 
-		public function __construct() {}
-
 		public function test($value) {
 			$result = $value == (float)$value;
 			if(!$result)

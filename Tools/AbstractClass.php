@@ -15,13 +15,14 @@ abstract class AbstractClass {
 	 */
 	protected $ignoreSettings = array('ignoreSettings');
 
-	public function __construct(array $config) {
+	public function __construct(array $config = array()) {
 		$this->setConfig($config);
 	}
 
 	/**
 	 * Set values in this object with a configuration array
 	 * @param array $config
+	 * @return $this
 	 */
 	public function setConfig(array $config) {
 		foreach($config as $field => $value) {
@@ -31,6 +32,11 @@ abstract class AbstractClass {
 		return $this;
 	}
 
+	/**
+	 * Wrapper to construct the class and return it allowing chains immediately
+	 * @param array $config
+	 * @return $this
+	 */
 	public static function construct(array $config) {
 		$calledClass = get_called_class();
 		return new $calledClass($config);

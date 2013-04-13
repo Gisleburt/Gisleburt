@@ -11,8 +11,6 @@
 		const ERROR_NOT_INTEGER = 'Needs to be a whole number';
 		const ERROR_TOO_LARGE = 'Needs to be smaller';
 
-		public function __construct() {}
-
 		public function test($value) {
 			$result = $value == (int)$value;
 			if(!$result) {

@@ -18,7 +18,7 @@
 		
 		/**
 		 * Variables to be given to the template
-		 * @var stdClass
+		 * @var \stdClass
 		 */
 		protected $view;
 
@@ -90,11 +90,12 @@
 
 			return $this;
 		}
-		
+
 		/**
 		 * Gets the location of the file to be displayed.
 		 * Relative or absolute file can be used to override automated functionality
-		 * @param string $file
+		 * @param $file
+		 * @return string
 		 */
 		protected function getTemplate($file) {
 			$file = ucfirst($file);
@@ -105,6 +106,7 @@
 		/**
 		 * Look for a parameter based on _REQUEST then URI elements
 		 * @param $name
+		 * @return mixed
 		 */
 		protected function getParam($name) {
 			return Tools::request($name);
@@ -116,10 +118,8 @@
 		 * @return mixed
 		 */
 		protected function get($key = null) {
-			return Tools::get();
+			return Tools::get($key);
 		}
-
-
 
 		/**
 		 * Retrieves a '_POST' variable
@@ -128,6 +128,14 @@
 		 */
 		protected function post($key = null) {
 			return Tools::post($key);
+		}
+
+		/**
+		 * Redirect to another location
+		 * @param $url
+		 */
+		protected function redirect($url) {
+			\header("location: $url");
 		}
 		
 	}

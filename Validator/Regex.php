@@ -2,6 +2,8 @@
 
 	namespace Gisleburt\Validator;
 
+	use Gisleburt\LazyData\Exception;
+
 	/**
 	 * Tests if a value is a float
 	 */
@@ -12,8 +14,11 @@
 
 		const ERROR_INVALID = 'Doesn\'t appear to be correct';
 
-		public function __construct(array $pattern) {
-			$this->regex = $pattern;
+		public function __construct(array $config = array()) {
+			parent::__construct($config);
+			if(!array_key_exists('pattern', $config))
+				throw new Exception('Tried to created a Regex Validator without a pattern');
+			$this->regex = $config['pattern'];
 		}
 
 		public function test($value) {

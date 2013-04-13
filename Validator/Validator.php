@@ -2,12 +2,13 @@
 
 	namespace Gisleburt\Validator;
 
+	use Gisleburt\Tools\AbstractClass;
+
 	/**
 	 *
 	 * @author Daniel Mason
 	 */
-
-	class Validator
+	class Validator extends AbstractClass
 	{
 
 		const ERROR_REQUIRED = 'This information is required';
@@ -41,9 +42,11 @@
 		 */
 		public $validators;
 
-		public function __construct(array $validators = array()) {
-			foreach($validators as $validator)
-				$this->addValidator($validator);
+		public function __construct(array $config = array()) {
+			parent::__construct($config);
+			if(array_key_exists('validators', $config))
+				foreach($config['validators'] as $validator)
+					$this->addValidator($validator);
 		}
 
 		/**
@@ -88,12 +91,12 @@
 			$valid = true;
 
 			if($this->isRequired && !preg_replace('/\s/', '', $value)) {
-				$this->error = self::ERROR_REQUIRED;
+				$this->error = $this->requiredMessag;
 				$valid = false;
 			}
 			elseif(!$this->test($value)) {
 				// Note: This only matters for extended validators
-				$this->error = $this->requiredMessage;
+				$this->error = $this->getError();
 				$valid = false;
 			}
 			elseif(is_array($this->validators)) {

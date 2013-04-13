@@ -16,15 +16,22 @@
 		const CHARS_SPACE = '\ ';
 		const CHARS_UNDERSCORE = '_';
 
-		public function __construct(array $characters) {
+		public function __construct(array $config = array()) {
 
-			if(!$characters)
+			if(!array_key_exists('characters', $config))
 				throw new \Exception('No characters were defined');
 
-			foreach($characters as $character) {
-				$this->regex .= $character;
-			}
-			$this->regex = "/^[$this->regex]+$/";
+			// The info we want to pass to the parent
+			$config['pattern'] = '';
+
+			// The info we're given
+			$config['characters'] = (array)$config['characters'];
+			foreach($config['characters'] as $character)
+				$config['pattern'] .= $character;
+
+			$config['pattern'] = "/^[{$config['pattern']}]+$/";
+
+			parent::__construct($config);
 
 		}
 

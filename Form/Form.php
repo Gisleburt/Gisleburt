@@ -77,14 +77,14 @@
 		}
 
 		/**
-		 * @param $name string The name of the desired element
-		 * @return Element
-		 * @throws \Gisleburt\LazyData\Exception
+		 * Returns the named element
+		 * @param $name string
+		 * @return Element|null
 		 */
 		public function getElement($name) {
 			if(array_key_exists($name, $this->formElements))
 				return $this->formElements[$name];
-			throw new Exception("Form Element '$name' not found in Form '$this->formName'");
+			return null;
 		}
 
 		/**
@@ -122,7 +122,9 @@
 		 * @return mixed
 		 */
 		public function getValue($elementName, $checkRequest = true) {
-			return $this->getElement($elementName)->getValue($checkRequest);
+			if($element = $this->getElement($elementName))
+				return $element->getValue($checkRequest);
+			return null;
 		}
 
 		/**

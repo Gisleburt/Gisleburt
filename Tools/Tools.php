@@ -28,10 +28,11 @@
 				return isset($_POST[$key]) ? $_POST[$key] : null;
 			return self::arrayToObject($_POST);
 		}
-		
+
 		/**
 		 * Returns the _GET, _POST or _COOKIE value for the given key or null if not found
-		 * @param string $key
+		 * @param null $key
+		 * @return mixed
 		 */
 		public static function request($key = null) {
 			if(isset($key))
@@ -42,7 +43,7 @@
 		/**
 		 * Turns an array into an object
 		 * @param array $array The array to convert
-		 * @param number $recursionLevel How many arrays deep to go
+		 * @param integer $recursionLevel How many arrays deep to go
 		 * @return \stdClass
 		 */
 		public static function arrayToObject(array $array, $recursionLevel = 0) {

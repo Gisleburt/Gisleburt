@@ -8,21 +8,26 @@
 	class MinLength extends Validator
 	{
 
-		protected $error = 'Too short';
+		const ERROR_INVALID = 'Too short';
+
+		protected $errorMessage = self::ERROR_INVALID;
 
 		protected $minLength;
 
-		public function __construct($minLength) {
-			$this->minLength = $minLength;
-			$this->error = "Too short, must be $minLength letters long";
+		public function __construct(array $config = array()) {
+
+			if(!array_key_exists('minLength', $config))
+				throw new Exception('Tried to created a MinLength Validator without a minLength');
+
+			parent::__construct($config);
+
+			$this->errorMessage = "Too short, must be $this->minLength letters long";
 		}
 
 		public function test($value) {
-			$result = strlen($value) >= $this->minLength;
-			if(!$result)
-				$this->error = $this->error;
-
-			return $result;
+			if(!$valid = strlen($value) >= $this->minLength)
+				$this->error = $this->errorMessage;
+			return $valid;
 		}
 
 	}
